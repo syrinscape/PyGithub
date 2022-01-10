@@ -40,6 +40,8 @@ class Github:
         per_page: int = ...,
         verify: bool = ...,
         retry: Any = ...,
+        seconds_between_requests: Optional[float] = ...,
+        seconds_between_writes: Optional[float] = ...,
     ) -> None: ...
     @property
     def FIX_REPO_GET_GIT_REF(self) -> bool: ...

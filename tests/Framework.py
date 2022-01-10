@@ -243,7 +243,7 @@ class BasicTestCase(unittest.TestCase):
     recordMode = False
     tokenAuthMode = False
     jwtAuthMode = False
-    per_page = github.MainClass.DEFAULT_PER_PAGE
+    per_page = 30  # github.MainClass.DEFAULT_PER_PAGE
     retry = None
     pool_size = None
     seconds_between_requests = None
