@@ -104,6 +104,8 @@ class Github:
         verify=True,
         retry=None,
         pool_size=None,
+        seconds_between_requests=None,
+        seconds_between_writes=None,
     ):
         """
         :param login_or_token: string
@@ -115,6 +117,8 @@ class Github:
         :param verify: boolean or string
         :param retry: int or urllib3.util.retry.Retry object
         :param pool_size: int
+        :param seconds_between_requests: float
+        :param seconds_between_writes: float
         """
 
         assert login_or_token is None or isinstance(login_or_token, str), login_or_token
@@ -129,6 +133,8 @@ class Github:
             or isinstance(retry, (urllib3.util.Retry))
         )
         assert pool_size is None or isinstance(pool_size, (int)), pool_size
+        assert seconds_between_requests is None or seconds_between_requests >= 0
+        assert seconds_between_writes is None or seconds_between_writes >= 0
         self.__requester = Requester(
             login_or_token,
             password,
@@ -140,6 +146,8 @@ class Github:
             verify,
             retry,
             pool_size,
+            seconds_between_requests,
+            seconds_between_writes,
         )
 
     @property

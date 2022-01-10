@@ -94,6 +94,14 @@ class Requester:
         headers: Dict[str, str] = ...,
         input: Optional[str] = ...,
     ) -> Tuple[int, Dict[str, Any], str]: ...
+    def __defer_request(
+            self,
+            verb: str,
+    ) -> None: ...
+    def __record_request_time(
+            self,
+            verb: str,
+    ) -> None: ...
     def __init__(
         self,
         login_or_token: Optional[str],
@@ -107,6 +115,8 @@ class Requester:
         per_page: int,
         verify: bool,
         retry: Any,
+        seconds_between_requests: Optional[float] = ...,
+        seconds_between_writes: Optional[float] = ...,
     ) -> None: ...
     def _initializeDebugFeature(self) -> None: ...
     def check_me(self, obj: GithubObject) -> None: ...
