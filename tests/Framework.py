@@ -243,8 +243,11 @@ class BasicTestCase(unittest.TestCase):
     recordMode = False
     tokenAuthMode = False
     jwtAuthMode = False
+    per_page = github.MainClass.DEFAULT_PER_PAGE
     retry = None
     pool_size = None
+    seconds_between_requests = None
+    seconds_between_writes = None
     replayDataFolder = os.path.join(os.path.dirname(__file__), "ReplayData")
 
     def setUp(self):
@@ -349,15 +352,31 @@ class TestCase(BasicTestCase):
 
         if self.tokenAuthMode:
             self.g = github.Github(
-                self.oauth_token, retry=self.retry, pool_size=self.pool_size
+                self.oauth_token,
+                per_page=self.per_page,
+                retry=self.retry,
+                pool_size=self.pool_size,
+                seconds_between_requests=self.seconds_between_requests,
+                seconds_between_writes=self.seconds_between_writes,
             )
         elif self.jwtAuthMode:
             self.g = github.Github(
-                jwt=self.jwt, retry=self.retry, pool_size=self.pool_size
+                jwt=self.jwt,
+                per_page=self.per_page,
+                retry=self.retry,
+                pool_size=self.pool_size,
+                seconds_between_requests=self.seconds_between_requests,
+                seconds_between_writes=self.seconds_between_writes,
             )
         else:
             self.g = github.Github(
-                self.login, self.password, retry=self.retry, pool_size=self.pool_size
+                self.login,
+                self.password,
+                per_page=self.per_page,
+                retry=self.retry,
+                pool_size=self.pool_size,
+                seconds_between_requests=self.seconds_between_requests,
+                seconds_between_writes=self.seconds_between_writes,
             )
 
 
@@ -373,9 +392,21 @@ def activateJWTAuthMode():  # pragma no cover (Function useful only when recordi
     BasicTestCase.jwtAuthMode = True
 
 
+def setPerPage(per_page):
+    BasicTestCase.per_page = per_page
+
+
 def enableRetry(retry):
     BasicTestCase.retry = retry
 
 
 def setPoolSize(pool_size):
     BasicTestCase.pool_size = pool_size
+
+
+def setSecondsBetweenRequests(seconds_between_requests):
+    BasicTestCase.seconds_between_requests = seconds_between_requests
+
+
+def setSecondsBetweenWrites(seconds_between_writes):
+    BasicTestCase.seconds_between_writes = seconds_between_writes
