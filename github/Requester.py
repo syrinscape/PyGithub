@@ -52,8 +52,6 @@
 ################################################################################
 
 import base64
-from collections import defaultdict
-from datetime import datetime
 import json
 import logging
 import mimetypes
@@ -61,6 +59,8 @@ import os
 import re
 import time
 import urllib
+from collections import defaultdict
+from datetime import datetime
 from io import IOBase
 
 import requests
@@ -574,7 +574,9 @@ class Requester:
                 if isinstance(input, IOBase):
                     input.close()
 
-            self.__log(verb, url, requestHeaders, input, status, responseHeaders, output)
+            self.__log(
+                verb, url, requestHeaders, input, status, responseHeaders, output
+            )
 
             if status == 202 and (
                 verb == "GET" or verb == "HEAD"
@@ -584,7 +586,9 @@ class Requester:
 
             if status == 301 and "location" in responseHeaders:
                 o = urllib.parse.urlparse(responseHeaders["location"])
-                return self.__requestRaw(original_cnx, verb, o.path, requestHeaders, input)
+                return self.__requestRaw(
+                    original_cnx, verb, o.path, requestHeaders, input
+                )
 
             return status, responseHeaders, output
         finally:
@@ -597,20 +601,28 @@ class Requester:
         # and self.__seconds_between_writes seconds have passed since last write request (if verb refers to a write).
         # Uses self.__last_requests.
         requests = self.__last_requests.values()
-        writes = [l for v, l in self.__last_requests.items() if v != 'GET']
+        writes = [l for v, l in self.__last_requests.items() if v != "GET"]
 
         last_request = max(requests) if requests else 0
         last_write = max(writes) if writes else 0
 
-        next_request = (last_request + self.__seconds_between_requests) if self.__seconds_between_requests else 0
-        next_write = (last_write + self.__seconds_between_writes) if self.__seconds_between_writes else 0
+        next_request = (
+            (last_request + self.__seconds_between_requests)
+            if self.__seconds_between_requests
+            else 0
+        )
+        next_write = (
+            (last_write + self.__seconds_between_writes)
+            if self.__seconds_between_writes
+            else 0
+        )
 
-        next = next_request if verb == 'GET' else max(next_request, next_write)
+        next = next_request if verb == "GET" else max(next_request, next_write)
         defer = max(next - datetime.utcnow().timestamp(), 0)
         if defer > 0:
             if self.__logger is None:
                 self.__logger = logging.getLogger(__name__)
-            self.__logger.debug(f'sleeping {defer}s before next GitHub request')
+            self.__logger.debug(f"sleeping {defer}s before next GitHub request")
             time.sleep(defer)
 
     def __record_request_time(self, verb):
