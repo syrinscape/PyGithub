@@ -432,6 +432,9 @@ class Requester:
             or output.get("message")
             .lower()
             .endswith("please wait a few minutes before you try again.")
+            or output.get("message")
+            .lower()
+            .endswith("please retry your request again later.")
         ):
             cls = GithubException.RateLimitExceededException
         elif status == 404 and output.get("message") == "Not Found":
